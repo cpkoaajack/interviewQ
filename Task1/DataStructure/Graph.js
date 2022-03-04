@@ -5,16 +5,19 @@ module.exports = class Graph {
 	#noOfVertices;
 	#AdjList;
 
-	constructor(noOfVertices) {
+	constructor(noOfVertices, verticesList) {
 		this.#noOfVertices = noOfVertices;
 		this.#AdjList = new Map();
+		// adding vertices
+		verticesList.forEach((vertex) => this.#addVertex(vertex));
 	}
 
-	addVertex = (vertex) => {
+	#addVertex = (vertex) => {
 		this.#AdjList.set(vertex, []);
 	};
 
 	addEdge = (vertex1, vertex2) => {
+		if (!(this.#AdjList.has(vertex1) && this.#AdjList.has(vertex2))) return false;
 		this.#AdjList.get(vertex1).push(vertex2);
 		this.#AdjList.get(vertex2).push(vertex1);
 	};
@@ -76,7 +79,7 @@ module.exports = class Graph {
 		return nodeList;
 	};
 
-	getShortestPath = (method, startVertex, endVertex) => {
+	getAllPaths = (method, startVertex, endVertex, getShortestPath = false) => {
 		if (!['DFS', 'BFS'].includes(method)) return false;
 		if (!startVertex || !endVertex) return false;
 		if (!this.#AdjList.has(startVertex) || !this.#AdjList.has(endVertex)) return false;
@@ -85,17 +88,9 @@ module.exports = class Graph {
 		if (method === 'DFS') result = this.#getAllPathsByDFS(startVertex, endVertex);
 		else if (method === 'BFS') result = this.#getAllPathsByBFS(startVertex, endVertex);
 		else return false;
-		return result.reduce((prev, next) => (prev.length <= next.length ? prev : next));
-	};
-
-	getAllPaths = (method, startVertex, endVertex) => {
-		if (!['DFS', 'BFS'].includes(method)) return false;
-		if (!startVertex || !endVertex) return false;
-		if (!this.#AdjList.has(startVertex) || !this.#AdjList.has(endVertex)) return false;
-		if (startVertex === endVertex) return [];
-		if (method === 'DFS') return this.#getAllPathsByDFS(startVertex, endVertex);
-		else if (method === 'BFS') return this.#getAllPathsByBFS(startVertex, endVertex);
-		else return false;
+		return getShortestPath
+			? result.reduce((prev, next) => (prev.length <= next.length ? prev : next))
+			: result;
 	};
 
 	#getAllPathsByDFS = (startVertex, endVertex) => {

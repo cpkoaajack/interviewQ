@@ -1,10 +1,7 @@
 const { Graph } = require('./DataStructure');
 
-const graph = new Graph(8);
 const vertices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-
-// adding vertices
-vertices.forEach((vertex) => graph.addVertex(vertex));
+const graph = new Graph(8, vertices);
 
 // adding edges
 graph.addEdge('A', 'B');
@@ -31,9 +28,9 @@ console.log('Q1b. All possible paths between A-H by BFS is', graph.getAllPaths('
 // b. Write a function that returns the least number of hops (shortest path) between A­-H.
 console.log(
 	'Q2a. The least number of hops (shortest path) between A-H by DFS is',
-	graph.getShortestPath('DFS', 'A', 'H'),
+	graph.getAllPaths('DFS', 'A', 'H', true),
 );
 console.log(
 	'Q2b. The least number of hops (shortest path) between A-H by BFS is',
-	graph.getShortestPath('DFS', 'A', 'H'),
+	graph.getAllPaths('DFS', 'A', 'H', true),
 );
