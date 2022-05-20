@@ -32,5 +32,5 @@ console.log(
 );
 console.log(
 	'Q2b. The least number of hops (shortest path) between A-H by BFS is',
-	graph.getAllPaths('DFS', 'A', 'H', true),
+	graph.getAllPaths('BFS', 'A', 'H', true),
 );
